@@ -1,0 +1,102 @@
+<form (ngSubmit)="onAddPost()" [formGroup]="kursFormular">
+  <div class="center">
+    <h1 *ngIf="mode === 'create'">Kurs erstellen</h1>
+    <h1 *ngIf="mode === 'edit'">Kurs bearbeiten</h1>
+  </div>
+
+  <div class="center">
+    <mat-card>
+      <mat-card-content>
+        <mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+
+        <div *ngIf="!loading" id="form-div">
+          <mat-form-field appearance="outline"
+                          id="name"
+                          matTooltip="Name des Kurses."
+                          matTooltipPosition="above">
+            <mat-label>Name</mat-label>
+            <input matInput
+                   formControlName="nameFC"
+                   name="name"
+                   type="text">
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline"
+                          id="semester"
+                          matTooltip="Semester, in welchem der Kurs stattfindet."
+                          matTooltipPosition="above">
+            <mat-label>Semester</mat-label>
+            <input matInput
+                   formControlName="semesterFC"
+                   name="semester"
+                   type="number"
+                   min="1">
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline"
+                          matTooltip="Fach, welchem der Kurs angehört (bspw. Hauptfach, Nebenfach, Informatik, Medizin, ...)"
+                          matTooltipPosition="above">
+            <mat-label>Fach</mat-label>
+            <input matInput
+                   formControlName="fachFC"
+                   name="fach"
+                   type="text">
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-slide-toggle #bewertet
+                            formControlName="bewertetFC"
+                            id="bewertet"
+                            name="bewertet"
+                            matTooltip="Werden die Serien bewertet und sind Bedingung für die Zulassung zur Prüfung, sollte diese Option akitviert werden."
+                            matTooltipPosition="above" (change)="onChangeBewertet()">
+            Serien werden bewertet.
+          </mat-slide-toggle>
+
+          <mat-form-field *ngIf="bewertet.checked"
+                          appearance="outline"
+                          matTooltip="Anzahl Serien, welche ingesamt im Kurs existieren."
+                          matTooltipPosition="above">
+            <mat-label>Anzahl Serien</mat-label>
+            <input matInput
+                   formControlName = "insgesamtFC"
+                   name="insgesamt"
+                   type="number"
+                   min="1" (change)="updateSerienValidity()">
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field *ngIf="bewertet.checked"
+                          appearance="outline"
+                          matTooltip="Minimale Anzahl Serien, welche bestanden werden müssen, um zur Prüfung zugelassen zu werden."
+                          matTooltipPosition="above">
+            <mat-label>Min. bestanden</mat-label>
+            <input matInput
+                   formControlName = "benoetigtFC"
+                   name="benoetigt"
+                   type="number"
+                   min="1" (change)="updateSerienValidity()">
+            <mat-error *ngIf="kursFormular.get('benoetigtFC')?.errors?.['required']">Eingabe erforderlich.</mat-error>
+            <mat-error *ngIf="kursFormular.get('benoetigtFC')?.errors?.['largerThanError']">Die Anzahl benötigter Serien kann nicht höher sein als die gesamte Anzahl Serien.</mat-error>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="warn" routerLink="/kurse">
+          <mat-icon fontIcon="cancel"></mat-icon>
+          Abbrechen
+        </button>
+        <button mat-flat-button
+                color="primary"
+                style="margin-left: 10px;"
+                [disabled]="loading || !kursFormular.valid"
+                type="submit">
+          <mat-icon fontIcon="save"></mat-icon>
+          Speichern
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</form>

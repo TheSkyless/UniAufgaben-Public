@@ -1,0 +1,19 @@
+<div mat-dialog-title>Aufgabe löschen?</div>
+<div mat-dialog-content>
+  Sie sind im Begriff, eine Aufgabe zu löschen.
+  <br>Fortfahren?
+</div>
+
+<div mat-dialog-actions>
+  <mat-progress-bar *ngIf="deleting" mode="query"></mat-progress-bar>
+  <button mat-flat-button *ngIf="!deleting" color="primary" [disabled]="deleting" (click)="onCancel()">
+    <mat-icon fontIcon="cancel"></mat-icon>
+    Abbrechen
+  </button>
+
+  <button mat-flat-button *ngIf="!deleting" color="warn" [disabled]="deleting" (click)="onDelete()">
+    <mat-icon fontIcon="delete"></mat-icon>
+    Löschen
+  </button>
+</div>
+
