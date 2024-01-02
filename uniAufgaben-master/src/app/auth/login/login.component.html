@@ -1,0 +1,35 @@
+<div class="center">
+  <mat-card>
+    <form (submit)="onLogin()" [formGroup]="loginForm">
+      <mat-card-title class="center">
+        Anmelden
+      </mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Benutzername</mat-label>
+          <input matInput type="text" formControlName="nameFC">
+          <mat-error>Eingabe erforderlich.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Passwort</mat-label>
+          <input matInput type="password" formControlName="passFC">
+          <mat-error>Eingabe erforderlich.</mat-error>
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+
+        <button *ngIf="!loading"
+                [disabled]="loginForm.invalid"
+                mat-flat-button
+                color="primary"
+                type="submit">
+          <mat-icon fontIcon="login"></mat-icon>
+          Anmelden
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

@@ -1,0 +1,94 @@
+<div class="center">
+  <h1>Ihr Konto</h1>
+</div>
+
+<div class="center">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Kontoinformationen</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+      <a *ngIf="!loading"><b>Nutzername: </b>{{nutzername}}</a>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="center">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Passwort ändern</mat-card-title>
+    </mat-card-header>
+    <form (submit)="onSave()" [formGroup]="accountForm">
+      <mat-card-content>
+        <mat-form-field appearance="outline" *ngIf="!loading">
+          <mat-label>Aktuelles Passwort</mat-label>
+          <input matInput type="password" formControlName="oldPassFC">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="!loading">
+          <mat-label>Neues Passwort</mat-label>
+          <input matInput type="password"
+                 (keyup)="getPWConf()?.updateValueAndValidity()"
+                 formControlName="passFC">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="!loading">
+          <mat-label>Passwort bestätigen</mat-label>
+          <input matInput
+                 type="password"
+                 formControlName="passConfFC">
+        </mat-form-field>
+
+        <div>
+          <mat-error *ngIf="getPW()?.hasError('pattern')">
+            Ihr eingegebenes Password entspricht nicht den Anforderungen:
+            <ul>
+              <li>Mindestens 8 bis höchstens 32 Zeichen.</li>
+              <li>Mindestens ein Grossbuchstabe, sowie ein Kleinbuchstabe.</li>
+              <li>Mindestens eine Zahl.</li>
+              <li>Mindestens ein Sonderzeichen.</li>
+              <li>Keine Leerzeichen.</li>
+            </ul>
+          </mat-error>
+        </div>
+
+        <mat-error style="margin-bottom: 10px;" *ngIf="getPWConf()?.hasError('passNotMatching')">
+          Passwörter stimmen nicht überein.
+        </mat-error>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+
+        <button *ngIf="!loading"
+                [disabled]="accountForm.invalid"
+                mat-flat-button
+                color="primary"
+                type="submit">
+          <mat-icon fontIcon="login"></mat-icon>
+          Speichern
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>
+
+<div class="center">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Konto löschen</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+
+      <button *ngIf="!loading"
+              mat-flat-button
+              color="warn"
+              (click)="onDelete()">
+        <mat-icon fontIcon="delete"></mat-icon>
+        Löschen
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

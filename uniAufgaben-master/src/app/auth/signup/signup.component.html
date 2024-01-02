@@ -1,0 +1,67 @@
+<div class="center">
+  <mat-card>
+    <form (submit)="onSignup()" [formGroup]="signupForm">
+      <mat-card-title class="center">
+        Registrieren
+      </mat-card-title>
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Benutzername</mat-label>
+          <input matInput
+                 type="text"
+                 formControlName="nameFC">
+          <mat-error *ngIf="getName()?.hasError('pattern')">Nutzername darf nur alphanumerische Zeichen, sowie ".", "-" und "_" beinhalten.</mat-error>
+          <mat-error *ngIf="getName()?.hasError('required')">Eingabe erforderlich.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Passwort</mat-label>
+          <input matInput
+                 (keyup)="getPWConf()?.updateValueAndValidity()"
+                 type="password"
+                 formControlName="passFC">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Passwort bestätigen</mat-label>
+          <input matInput
+                 type="password"
+                 formControlName="passConfFC">
+        </mat-form-field>
+        <mat-error style="margin-top: -10px; margin-bottom: 10px" *ngIf="getPWConf()?.hasError('passNotMatching')">
+          Passwörter stimmen nicht überein.
+        </mat-error>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+
+        <button *ngIf="!loading"
+                [disabled]="signupForm.invalid"
+                mat-flat-button
+                color="primary"
+                type="submit">
+          <mat-icon fontIcon="person_add"></mat-icon>
+          Registrieren
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>
+
+<div class="center">
+  <mat-card *ngIf="getPW()?.hasError('pattern')">
+    <mat-card-content>
+      <mat-error *ngIf="getPW()?.hasError('pattern')">
+        Ihr eingegebenes Password entspricht nicht den Anforderungen:
+        <ul>
+          <li>Mindestens 8 bis höchstens 32 Zeichen.</li>
+          <li>Mindestens ein Grossbuchstabe, sowie ein Kleinbuchstabe.</li>
+          <li>Mindestens eine Zahl.</li>
+          <li>Mindestens ein Sonderzeichen.</li>
+          <li>Keine Leerzeichen.</li>
+        </ul>
+      </mat-error>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,118 @@
+<form [formGroup]="aufgabenFormular" (ngSubmit)="onAddAufgabe()">
+  <div class="center">
+    <h1 *ngIf="mode === 'create'">Aufgabe erstellen</h1>
+    <h1 *ngIf="mode === 'edit'">Aufgabe bearbeiten</h1>
+  </div>
+
+  <div class="center">
+    <mat-card>
+      <mat-card-content>
+        <mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+
+        <div *ngIf="!loading">
+          <mat-form-field appearance="outline">
+            <mat-label>Kurs</mat-label>
+            <mat-select
+              (openedChange)="getKurse($event)"
+              formControlName="kursFC"
+              matTooltip="Kurs, welcher die Aufgabe zugehört."
+              matTooltipPosition="above">
+              <mat-option disabled *ngIf="kurseLoading">
+                <a>Kurse werden geladen...</a>
+                <mat-progress-bar mode="query"></mat-progress-bar>
+              </mat-option>
+
+              <div *ngIf="!kurseLoading">
+                <mat-option *ngIf="kurse.length === 0">
+                  <mat-icon fontIcon="dangerous" style="color: red; height: 50px; width: 50px; font-size: 50px"></mat-icon>
+                  Es sind keine Kurse vorhanden.
+                  <br>Sie müssen mindestens einen Kurs erstellen, damit Sie eine Aufgabe erstellen können.
+                  <br>
+                  <button mat-flat-button color="primary" routerLink="/kurs/neu">
+                    <mat-icon fontIcon="add"></mat-icon>
+                    Kurs erstellen
+                  </button>
+                </mat-option>
+                <mat-option *ngFor="let kurs of kurse" [value]="kurs.id">{{kurs.name}}</mat-option>
+              </div>
+            </mat-select>
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Seriennummer</mat-label>
+            <input matInput
+                   formControlName="seriennummerFC"
+                   type="number"
+                   min="1"
+                   matTooltip="Nummer der Serie."
+                   matTooltipPosition="above">
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Fälligkeit</mat-label>
+            <mtx-datetimepicker #datetimePicker
+                                type="datetime"
+                                mode="landscape"
+                                twelvehour="false"
+                                timeInput="true"></mtx-datetimepicker>
+            <mtx-datetimepicker-toggle [for]="datetimePicker" matSuffix></mtx-datetimepicker-toggle>
+            <input matInput
+                   [mtxDatetimepicker]="datetimePicker"
+                   readonly
+                   formControlName="faelligkeitFC"
+                   matTooltip="Bis wann die Aufgabe abgegeben werden muss."
+                   matTooltipPosition="above">
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select matInput
+                        formControlName="statusFC"
+                        matTooltip="Aktueller Stand der Aufgabe."
+                        matTooltipPosition="above">
+              <mat-option [value]="status.Offen">
+                <mat-chip style="background: #ffab1c"><a style="color: white">Offen</a></mat-chip>
+              </mat-option>
+              <mat-option [value]="status.Abgegeben">
+                <mat-chip style="background: #9e9e9e"><a style="color: white">Abgegeben</a></mat-chip>
+              </mat-option>
+              <mat-option [value]="status['Nicht bestanden']">
+                <mat-chip style="background: #ff0000"><a style="color: white">Nicht bestanden</a></mat-chip>
+              </mat-option>
+              <mat-option [value]="status.Bestanden">
+                <mat-chip style="background: #00c76c"><a style="color: white">Bestanden</a></mat-chip>
+              </mat-option>
+            </mat-select>
+            <mat-error>Eingabe erforderlich.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Kommentar</mat-label>
+            <textarea matInput
+                      formControlName="kommentarFC"
+                      type="text"
+                      matTooltip="Optionaler Kommentar, bzw. Notiz."
+                      matTooltipPosition="above"></textarea>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="warn" [routerLink]="returnURL">
+          <mat-icon fontIcon="cancel"></mat-icon>
+          Abbrechen
+        </button>
+        <button mat-flat-button
+                color="primary"
+                style="margin-left: 10px;"
+                [disabled]="loading || !aufgabenFormular.valid"
+                type="submit">
+          <mat-icon fontIcon="save"></mat-icon>
+          Speichern
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</form>

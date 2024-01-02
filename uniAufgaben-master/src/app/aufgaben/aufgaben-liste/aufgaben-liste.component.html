@@ -1,0 +1,146 @@
+<div class="titlebar">
+  <h1 *ngIf="kursName; else noNameTitle">Aufgaben für den Kurs "{{kursName}}"</h1>
+  <ng-template #noNameTitle><h1>Aufgabenliste</h1></ng-template>
+
+  <span class="spacer"></span>
+  <button mat-flat-button color="primary" [disabled]="loading" routerLink="/aufgabe/neu" [queryParams]="getReturnURL()">
+    <mat-icon fontIcon="add"></mat-icon>
+    Aufgabe erstellen
+  </button>
+</div>
+
+<div *ngIf="loading">
+  <p>Aufgaben werden geladen...</p>
+  <mat-progress-bar mode="query"></mat-progress-bar>
+</div>
+
+<div class="mat-elevation-z8">
+  <form [formGroup]="filterForm" class="search form">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Suche</mat-label>
+      <input matInput class="search-bar" (keyup)="onFilter()" formControlName="sucheFC">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="margin-left: 10px;">
+      <mat-label>Serie</mat-label>
+      <input matInput class="search-bar" type="number" min="1" (change)="onFilter()" formControlName="serieFC">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="margin-left: 10px;">
+      <mat-label>Status</mat-label>
+      <mat-select matInput (selectionChange)="onFilter()" formControlName="statusFC">
+        <mat-option value=0>
+          <mat-chip style="background: #ffab1c"><a style="color: white">Offen</a></mat-chip>
+        </mat-option>
+        <mat-option value=1>
+          <mat-chip style="background: #9e9e9e"><a style="color: white">Abgegeben</a></mat-chip>
+        </mat-option>
+        <mat-option value=2>
+          <mat-chip style="background: #ff0000"><a style="color: white">Nicht bestanden</a></mat-chip>
+        </mat-option>
+        <mat-option value=3>
+          <mat-chip style="background: #00c76c"><a style="color: white">Bestanden</a></mat-chip>
+        </mat-option>
+        <mat-option>
+          Filter entfernen
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="margin-left: 10px;">
+      <mat-label>Von</mat-label>
+      <mtx-datetimepicker #datetimePickerStart
+                          type="datetime"
+                          mode="landscape"
+                          twelvehour="false"
+                          timeInput="true"></mtx-datetimepicker>
+      <mtx-datetimepicker-toggle [for]="datetimePickerStart" matSuffix></mtx-datetimepicker-toggle>
+      <input matInput
+             [mtxDatetimepicker]="datetimePickerStart"
+             readonly
+             (dateChange)="onFilter()"
+             formControlName="startFC">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="margin-left: 10px;">
+      <mat-label>Bis</mat-label>
+      <mtx-datetimepicker #datetimePickerEnd
+                          type="datetime"
+                          mode="landscape"
+                          twelvehour="false"
+                          timeInput="true"></mtx-datetimepicker>
+      <mtx-datetimepicker-toggle [for]="datetimePickerEnd" matSuffix></mtx-datetimepicker-toggle>
+      <input matInput
+             [mtxDatetimepicker]="datetimePickerEnd"
+             readonly
+             (dateChange)="onFilter()"
+             formControlName="endFC">
+    </mat-form-field>
+    <div><button mat-icon-button class="clearFilter" (click)="onClear()"><mat-icon fontIcon="filter_alt_off"></mat-icon></button></div>
+  </form>
+
+  <table mat-table matSort [dataSource]="aufgabenDataSource" style="width: 100%" (matSortChange)="onSort()" *ngIf="!loading">
+
+    <ng-container matColumnDef="kurs">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Kurs</th>
+      <td mat-cell *matCellDef="let aufgabe" routerLink="{{aufgabe.kurs}}">{{kursDict[aufgabe.kurs]}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="seriennummer">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Serie</th>
+      <td mat-cell *matCellDef="let aufgabe">{{aufgabe.seriennummer}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="faelligkeit">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fälligkeit</th>
+      <td mat-cell *matCellDef="let aufgabe">{{aufgabe.faelligkeit | date:'dd.MM.yyyy, HH:mm'}} Uhr</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+      <td mat-cell *matCellDef="let aufgabe">
+        <div *ngIf="aufgabe.status == 0">
+          <mat-chip style="background: #ffab1c"><a style="color: white">Offen</a></mat-chip>
+        </div>
+        <div *ngIf="aufgabe.status == 1">
+          <mat-chip style="background: #9e9e9e"><a style="color: white">Abgegeben</a></mat-chip>
+        </div>
+        <div *ngIf="aufgabe.status == 2">
+          <mat-chip style="background: #ff0000"><a style="color: white">Nicht bestanden</a></mat-chip>
+        </div>
+        <div *ngIf="aufgabe.status == 3">
+          <mat-chip style="background: #00c76c"><a style="color: white">Bestanden</a></mat-chip>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="kommentar">
+      <th mat-header-cell *matHeaderCellDef>Kommentar</th>
+      <td mat-cell *matCellDef="let aufgabe">{{aufgabe.kommentar}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="optionen">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let aufgabe">
+        <button mat-flat-button color="primary" [routerLink]="['/aufgabe/bearbeiten/',aufgabe.id]" [queryParams]="getReturnURL()">
+          <mat-icon fontIcon="edit"></mat-icon>
+          Bearbeiten
+        </button>
+        <button mat-flat-button color="warn" style="margin-left: 10px" (click)="onDelete(aufgabe.id,aufgabe.kurs)">
+          <mat-icon fontIcon="delete"></mat-icon>
+          Löschen
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="spalten"></tr>
+    <tr mat-row *matRowDef="let _; columns: spalten;"></tr>
+
+    <tr *matNoDataRow>
+      <td *ngIf="kursName" colspan="5">Keine Aufgaben gefunden mit den gegebenen Kriterien. Erstellen Sie einen neue Aufgabe, indem Sie auf die Schaltfläche "Aufgabe erstellen" klicken.</td>
+      <td *ngIf="!kursName" colspan="6">Keine Aufgaben gefunden mit den gegebenen Kriterien. Erstellen Sie eine neue Aufgabe, indem Sie auf die Schaltfläche "Aufgabe erstellen" klicken, sofern mindestens ein Kurs bereits existiert.</td>
+    </tr>
+  </table>
+  <mat-paginator showFirstLastButtons pageSize="10" [pageSizeOptions]="[5,10,20,50]" (page)="onPage()"></mat-paginator>
+</div>

@@ -1,0 +1,29 @@
+<form style="width: 100%" [formGroup]="deleteForm">
+  <div mat-dialog-title>Konto schliessen und löschen?</div>
+  <div mat-dialog-content>
+    Sie sind im Begriff, Ihr Konto zu schliessen und zu löschen.
+    <br>Sämtliche Aufgaben und Kurse, welche diesem Konto zugewiesen sind, werden ebenfalls gelöscht.
+    <br>Der Nutzername ist nach der Löschung anschliessend wieder freigegeben zur Registrierung.
+    <br><br>
+    <p>Passwort erforderlich um fortzufahren:</p>
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Passwort</mat-label>
+      <input matInput type="password" formControlName="passFC">
+      <mat-error>Eingabe erforderlich.</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+    <a *ngIf="accepted">Löschung wird durchgeführt...</a>
+    <mat-progress-bar *ngIf="deleting" mode="query"></mat-progress-bar>
+    <button mat-flat-button *ngIf="!deleting" color="primary" [disabled]="deleting" (click)="onCancel()">
+      <mat-icon fontIcon="cancel"></mat-icon>
+      Abbrechen
+    </button>
+
+    <button mat-flat-button *ngIf="!deleting" color="warn" [disabled]="deleting || !deleteForm.valid" (click)="onDelete()">
+      <mat-icon fontIcon="delete"></mat-icon>
+      Löschen
+    </button>
+  </div>
+</form>
