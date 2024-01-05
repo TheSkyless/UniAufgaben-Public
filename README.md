@@ -1,12 +1,12 @@
 # UniAufgaben
-## 1. Beschreibung
+## 1: Beschreibung
 UniAufgaben ist eine Webapplikation, welche im Rahmen einer Bachelorarbeit erstellt wurde und genutzt werden kann, um Aufgaben im Studium organisieren zu können. Die Applikation kann von mehreren Nutzern verwendet werden. Für die Erstellung wurde der MEAN-Stapel verwendet, welcher besteht aus MongoDB, Express.js, Angular und Node.js.
 
-## 2. Installation
+## 2: Installation
 
 Laden Sie die Dateien aus dem Projekt herunter und extrahieren Sie die Dateien aus dem .zip-Archiv. Plazieren Sie dann sämtliche Dateien in einen Ordner, wo die Applikation laufen soll.
 
-### 2.1 Backend
+### 2.1: Backend
 Das Backend läuft mit Node.js. Es ist deshalb nötig, [Node.js](https://nodejs.org/) zu installieren. Stellen Sie dabeit sicher, das npm ebenfalls korrekt installiert wurde, da dieses benötigt wird, um die nötigen Erweiterungen installieren zu können. Installiert werden müssen: 
 - [Mongoose](https://www.npmjs.com/package/mongoose)
 - [mongoose-unique-validator](https://www.npmjs.com/package/mongoose-unique-validator)
@@ -23,7 +23,7 @@ Um das Backend zu starten, öffnen Sie ein Terminal im Ordner der Applikation un
 >Ist das Backend nicht aktiv, kann das Frontend keine Verbindung zur Datenbank herstellen.
 >Sie können [GNU Screen](https://www.gnu.org/software/screen/) verwenden, um das Backend am laufen zu lassen, während Sie z.B. das Frontend aufstarten.
 
-## 2.2 Frontend
+### 2.2: Frontend
 Das Frontend wurde mit Angular erstellt. Eine Anleitung zur Installation von Angular finden sie hier: https://angular.io/guide/setup-local.
 Sobald Angular installiert wurde, kann der Client bei `http://localhost:4200` aufgerufen werden, indem Sie ein Terminal im Order `src` öffnen, und anschliessend `ng serve` eingeben.
 
