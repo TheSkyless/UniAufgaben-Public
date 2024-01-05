@@ -14,7 +14,7 @@ Das Backend läuft mit Node.js. Es ist deshalb nötig, [Node.js](https://nodejs.
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 - [dotenv](https://www.npmjs.com/package/dotenv)
 
-Bearbeiten Sie anschliessend die Datei mit dem Namen ".env.template"; Fügen Sie alle benötigten Daten, um eine Verbindung zu MongoDB herstellen zu können (d.h. alle Variablen, welche mit "DB" beginnen). Für die Variabel "TOKEN_KEY" müssen Sie selbst eine Zeichenfolge definieren, welche verwendet wird, um die Token zu verschlüsseln. Diese sollte möglichst lang sein. Benennen Sie schliesslich die Datei um in ".env".
+Bearbeiten Sie anschliessend die Datei mit dem Namen `.env.template`; Fügen Sie alle benötigten Daten, um eine Verbindung zu MongoDB herstellen zu können (d.h. alle Variablen, welche mit `DB` beginnen). Für die Variabel `TOKEN_KEY` müssen Sie selbst eine Zeichenfolge definieren, welche verwendet wird, um die Token zu verschlüsseln. Diese sollte möglichst lang sein. Benennen Sie schliesslich die Datei um in `.env`.
 
 Um das Backend zu starten, öffnen Sie ein Terminal im Ordner der Applikation und geben Sie den Befehl `node server.js` ein.
 
