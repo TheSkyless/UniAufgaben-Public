@@ -1,4 +1,9 @@
 # UniAufgaben
+
+<p align="center">
+  <img src="https://github.com/TheSkyless/UniAufgaben-Public/assets/108612292/752c34a3-ceef-4833-8351-b1c85dd7c7b5" alt="UniAufgaben Logo" width="150"/>
+</p>
+
 ## 1: Beschreibung
 UniAufgaben ist eine Webapplikation, welche im Rahmen einer Bachelorarbeit erstellt wurde und genutzt werden kann, um Aufgaben im Studium organisieren zu können. Die Applikation kann von mehreren Nutzern verwendet werden. Für die Erstellung wurde der MEAN-Stapel verwendet, welcher besteht aus MongoDB, Express.js, Angular und Node.js.
 
